@@ -1,0 +1,35 @@
+.order-card {
+  border: 2px solid var(--ink);
+  background: var(--paper-raised);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 2px dashed var(--line);
+}
+.order-card-header .mono {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.order-item-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding: 4px 0;
+}
+.status-select {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 6px 8px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  text-transform: uppercase;
+}
