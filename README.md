@@ -4,8 +4,31 @@ A complete e-commerce web app built as a portfolio piece: a React storefront bac
 Node.js/Express + SQLite API, with authentication, a shopping cart, order management, a
 sandboxed Stripe-style payment flow, and an admin dashboard for managing inventory and orders.
 
-> Live demo screenshots below. Payments are fully simulated (no Stripe account or real
-> charges required), so the whole thing runs out of the box with zero external services.
+> Payments are fully simulated (no Stripe account or real charges required), so the whole
+> thing runs out of the box with zero external services.
+
+## Screenshots
+
+**Home page**
+![Home page](docs/screenshots/01-home.png)
+
+**Product catalog** — search, category filter, sort, pagination
+![Catalog](docs/screenshots/02-catalog.png)
+
+**Product detail** — live stock badge, quantity picker
+![Product detail](docs/screenshots/03-product-detail.png)
+
+**Cart**
+![Cart](docs/screenshots/04-cart.png)
+
+**Checkout** — shipping form + sandboxed payment
+![Checkout](docs/screenshots/05-checkout.png)
+
+**Admin dashboard** — revenue, orders, low-stock alerts, top sellers
+![Admin dashboard](docs/screenshots/06-admin-dashboard.png)
+
+**Admin product management**
+![Admin products](docs/screenshots/07-admin-products.png)
 
 ## Tech Stack
 
