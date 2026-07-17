@@ -9,6 +9,12 @@ const cartRoutes = require('./src/routes/cart');
 const orderRoutes = require('./src/routes/orders');
 const paymentRoutes = require('./src/routes/payments');
 const adminRoutes = require('./src/routes/admin');
+const { seedIfEmpty } = require('./src/seed');
+
+// On platforms with ephemeral/reset-on-restart disks (e.g. Render's free
+// tier), this makes sure the demo catalog and demo accounts are always
+// there after a cold start, instead of the site showing an empty store.
+seedIfEmpty();
 
 const app = express();
 const PORT = process.env.PORT || 5000;

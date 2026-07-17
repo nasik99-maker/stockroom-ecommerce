@@ -126,6 +126,64 @@ Expiry and CVC can be anything valid-looking (e.g. `12/28`, `123`) — nothing i
   (`stripe.paymentIntents.create`/`confirm`, plus webhooks) and the frontend checkout flow
   doesn't need to change.
 
+## Deploying it live
+
+This is a two-part app, so it needs two hosts: a **static frontend** and a **persistent
+backend server**. Vercel is built for the former (and serverless functions), not for a
+long-running Node process with a file-based database — so the backend goes elsewhere.
+
+**Recommended split:**
+- Frontend (Vite build) → [Vercel](https://vercel.com)
+- Backend (Express + SQLite) → [Render](https://render.com)
+
+### 1. Deploy the backend on Render
+
+1. Push this repo to GitHub (if you haven't already).
+2. On Render: **New → Web Service** → connect your GitHub repo.
+3. Set **Root Directory** to `backend`.
+4. Build command: `npm install`
+5. Start command: `npm start`
+6. Add an environment variable: `JWT_SECRET` → any long random string.
+7. Choose the **Free** instance type and deploy.
+
+Render's free tier spins the service down after 15 minutes of inactivity (first request
+after that takes ~30-60s to wake back up), and free instances don't keep a persistent disk
+across restarts — meaning the SQLite file resets on cold start. That's why the app
+**auto-seeds itself on boot** if the database is empty (see `seedIfEmpty()` in
+`backend/src/seed.js`, called from `server.js`): the demo catalog and demo accounts always
+come back automatically, so the live demo never shows an empty store. Any real orders
+placed between cold starts will persist until the next restart, then reset.
+
+Once deployed, note your backend URL — something like `https://your-app.onrender.com`.
+
+### 2. Deploy the frontend on Vercel
+
+1. On Vercel: **Add New → Project** → import the same GitHub repo.
+2. Set **Root Directory** to `frontend`.
+3. Framework preset should auto-detect as **Vite**.
+4. Add an environment variable: `VITE_API_URL` → `https://your-app.onrender.com/api`
+   (your Render URL from step 1, with `/api` on the end).
+5. Deploy.
+
+Vercel gives you a URL like `https://your-project.vercel.app` — that's your live site.
+
+### 3. Double-check CORS
+
+The backend currently allows requests from any origin (`app.use(cors())` in `server.js`),
+so it'll work with your Vercel URL out of the box. If you want to lock it down to just your
+frontend's domain, change that line to:
+
+```js
+app.use(cors({ origin: 'https://your-project.vercel.app' }));
+```
+
+### 4. Test the live site
+
+Visit your Vercel URL and confirm the catalog loads (this proves the frontend can reach the
+backend). Then log in with the demo accounts (`admin@demo.com` / `admin123` or
+`customer@demo.com` / `customer123`) and run through browse → cart → checkout to confirm
+the whole flow works end-to-end in production.
+
 ## Notes for reviewers
 
 This was built end-to-end (schema, API, auth, cart logic, payment simulation, admin
